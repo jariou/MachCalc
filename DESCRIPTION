@@ -1,0 +1,18 @@
+Package: MachCalc
+Version: 0.0.1
+Date: 2020-02-18
+Title: A Machinist Calculator
+Author: Jacques Rioux
+Maintainer: Jacques Rioux <jacques.rioux@outlook.com>
+Depends: R (>= 3.6.0)
+Imports: 
+   tools
+Suggests:
+    roxygen2,
+    knitr
+Description: An R package implementing a variety of  usefull calculations fr a machinist.
+License: GPL
+URL: https://github.com/jariou/MachCalc
+BugReports: https://github.com/jariou/MachCalc/issues
+VignetteBuilder: knitr
+RoxygenNote: 7.0.2
