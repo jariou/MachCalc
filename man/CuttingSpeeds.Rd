@@ -30,7 +30,7 @@ MPM.Max  <- c(50,  38, 	7,	2, 20, 21, 69,	40,	45,	10, 305,  210, 6,  11, 12, 15,
 SFM.Min  <- c(60,  10,  20, 6, 12, 10, 115, 30, 10,	30, 400,  300, 20, 35, 40, 50, 600)
 SFM.Max  <- c(100, 125, 25, 8, 65, 70, 225, 7,  80, 33, 1000, 700, 20, 35, 40, 50, 1000)
 
-cuttingSpeeds <- data.frame(Material, MPM.Min, MPM.Max,SFM.Min,SFM.Max)
+cuttingSpeeds <- data.frame(Material, MPM.Min, MPM.Max, SFM.Min, SFM.Max, stringsAsFactors = FALSE)
 }
 }
 \description{
@@ -38,6 +38,6 @@ Cutting speeds for various materials
 using a plain high speed steel cutter
 }
 \examples{
-data(StarrettTapDrills)
-str(StarrettTapDrills)
+data(cuttingSpeeds)
+str(cuttingSpeeds)
 }
