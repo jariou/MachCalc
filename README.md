@@ -1,7 +1,8 @@
 # Machinist Calculator R package
 
 [![Build Status](https://travis-ci.org/jariou/machcalc.svg)](https://travis-ci.org/jariou/machcalc)
-An R package that provides a number of useful functions for machinis computations.
+An R package that provides a number of useful functions for machinist computations.
+
 Specifically, it has functions for
 
 - Gear Ratio approximation using continuous fractions
