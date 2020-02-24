@@ -3,7 +3,7 @@
 \docType{data}
 \name{StarrettTapDrills}
 \alias{StarrettTapDrills}
-\title{Starrett Tab Drill Sizes}
+\title{Starrett Inch Tap Drill Sizes}
 \format{A numeric data frame.}
 \source{
 Generated from \code{
@@ -39,7 +39,7 @@ decimal <- c(
              1.0000, 1.0469, 1.1094, 1.1250, 1.1719, 1.2188,
              1.2500, 1.2969, 1.3438, 1.3750, 1.4219, 1.5000
              )
-numbers <- (
+drills <- (
              80    , 79     , 1/64   , 78   , 77     , 76,
              75    , 74     , 73     , 72   , 71     , 70,
              69    , 68     , 1/32   , 67   , 66     , 65,
@@ -71,7 +71,7 @@ numbers <- (
              1     , 1 3/64 , 1 7/64 , 1 1/8, 1 11/64, 1 7/32,
              1 1/4 , 1 19/64, 1 11/32, 1 3/8, 1 27/64, 1 1/2
             )
-tapSize <- c(
+TapSizeInch <- c(
                         ,           ,           ,           ,            ,            ,
                         ,           ,           ,           ,            ,            ,
                         ,           ,           ,           ,            ,            ,
@@ -103,13 +103,39 @@ tapSize <- c(
                         , "1 1/8-12", "1 1/4-7" ,           , "1 1/4-12" , "1 3/8-6"  ,
                         , "1 3/8-12", "1 1/2-6" ,           , "1 1/2-12" ,           
              )
- StarrettTapDrills <- data.frame(Decimal, Numbers, tapSize, stringsAsFactors = FALSE)
+ InchTapDrills <- data.frame(Decimal,
+                             Drills, 
+                             inchTapSize, 
+                             stringsAsFactors = FALSE)
+}
+
+Generated from \code{
+DrillSize <- (
+              11/32,  7/16  , 37/64,   23/32 , 59/64  , 1 5/32, 1 1/2,
+              1 3/4, 2 7/32, 2 21/32, 3 1/4, 3 3/4, 4 1/4
+              )
+ThreadSize <- c(
+                "1/8"  , "1/4", "3/8"  , "1/2", "3/4"  , "1", "1 1/4", 
+                "1 1/2", "2"  , "2 1/2", "3"  , "3 1/2", "4"            
+                )
+ThreadPitch <- c(
+                 27  , 18, 18  , 14, 14  , 11.5, 11.5, 
+                 11.5, 11.5  , 8, 8  , 8, 8            
+                )
+ PipeThreadDrill <- data.frame(Decimal,
+                             Drills, 
+                             inchTapSize, 
+                             stringsAsFactors = FALSE)
 }
 }
 \description{
 A few numbers from \code{rnorm()}.
+
+A few numbers from \code{rnorm()}.
 }
 \examples{
-data(StarrettTapDrills)
-str(StarrettTapDrills)
+data(InchTapDrills)
+str(InchTapDrills)
+data(PipeThreadDrill)
+str(PipeThreadDrill)
 }

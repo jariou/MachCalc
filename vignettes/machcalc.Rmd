@@ -1,0 +1,312 @@
+
+---
+title: "Machinist Calculator Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Main vignette for MachCalc}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+<!--
+% \VignetteEngine{knitr::knitr}
+% \VignetteIndexEntry{Introduction to  MachCalc}
+-->
+This vignette presents an overview of the main 
+functions implemented in the MachCalc package. 
+
+
+# Overview
+
+This package was writtent mainly for my own use, but 
+I hope others will also find a use for them and let 
+me know if they see errors.
+
+# List of main R functions and objects
+
+
+| Function                      | Summary Description                                                 |
+|-------------------------------|---------------------------------------------------------------------|
+| `bestGearRatio`               | Finds pairs of gears producing ratios close to the one required     |
+| `bore3P`                      | Size of the bore of a hole in which 3 given pins fit cotangentially |
+| `gearRatio`                   | Support function for *bestGearRatio*
+| `linesCircle`                 | Support function for *bore3P*
+| `plotCircle`                  | Support function for *bore3P*
+| `spindleSpeed`                | Calculates spindle speed
+
+
+To begin, we'll load **machcalc** and call
+the *bestGearRatio* function.
+
+```{r setup, message = FALSE}
+library(MachCalc)
+bestGearRatio(1.27,100)
+```
+
+## `arrange()`: Arrange rows by variables
+
+`dplyr::arrange()` orders the rows of a data frame by the values of one or more columns: 
+
+```{r}
+mtcars %>% arrange(cyl, disp)
+```
+
+The `desc()` helper allows you to order selected variables in descending order:
+
+```{r}
+mtcars %>% arrange(desc(cyl), desc(disp))
+```
+
+We can replicate in base R by using `[` with `order()`:
+
+```{r}
+mtcars[order(mtcars$cyl, mtcars$disp), , drop = FALSE]
+```
+
+Note the use of `drop = FALSE`. If you forget this, and the input is a data frame with a single column, the output will be a vector, not a data frame. This is a source of subtle bugs.
+
+Base R does not provide a convenient and general way to sort individual variables in descending order, so you have two options:
+
+* For numeric variables, you can use `-x`.
+* You can request `order()` to sort all variables in descending order.
+
+```{r, results = FALSE}
+mtcars[order(mtcars$cyl, mtcars$disp, decreasing = TRUE), , drop = FALSE]
+mtcars[order(-mtcars$cyl, -mtcars$disp), , drop = FALSE]
+```
+
+## `distinct()`: Select distinct/unique rows
+
+`dplyr::distinct()` selects unique rows:
+
+```{r}
+df <- tibble(
+  x = sample(10, 100, rep = TRUE),
+  y = sample(10, 100, rep = TRUE)
+)
+df %>% distinct(x) # selected columns
+df %>% distinct(x, .keep_all = TRUE) # whole data frame
+```
+
+There are two equivalents in base R, depending on whether you want the whole data frame, or just selected variables:
+
+```{r}
+unique(df["x"]) # selected columns
+df[!duplicated(df$x), , drop = FALSE] # whole data frame
+```
+
+## `filter()`: Return rows with matching conditions
+
+`dplyr::filter()` selects rows where an expression is `TRUE`:
+
+```{r}
+starwars %>% filter(species == "Human")
+starwars %>% filter(mass > 1000)
+starwars %>% filter(hair_color == "none" & eye_color == "black")
+```
+
+The closest base equivalent (and the inspiration for `filter()`) is `subset()`:
+
+```{r}
+subset(starwars, species == "Human")
+subset(starwars, mass > 1000)
+subset(starwars, hair_color == "none" & eye_color == "black")
+```
+
+You can also use `[` but this also requires the use of `which()` to remove `NA`s:
+
+```{r}
+starwars[which(starwars$species == "human"), , drop = FALSE]
+starwars[which(starwars$mass > 1000), , drop = FALSE]
+starwars[which(starwars$hair_color == "none" & starwars$eye_color == "black"), , drop = FALSE]
+```
+
+## `mutate()`: Create or transform variables
+
+`dplyr::mutate()` creates new variables from existing variables:
+
+```{r}
+df %>% mutate(z = x + y, z2 = z ^ 2)
+```
+
+The closest base equivalent is `transform()`, but note that it cannot use freshly created variables:
+
+```{r}
+head(transform(df, z = x + y, z2 = (x + y) ^ 2))
+```
+Alternatively, you can use `$<-`:
+
+```{r}
+mtcars$cyl2 <- mtcars$cyl * 2
+mtcars$cyl4 <- mtcars$cyl2 * 2
+```
+
+When applied to a grouped data frame, `dplyr::mutate()` computes new variable once per group:
+
+```{r}
+gf <- tibble(g = c(1, 1, 2, 2), x = c(0.5, 1.5, 2.5, 3.5))
+gf %>% 
+  group_by(g) %>% 
+  mutate(x_mean = mean(x), x_rank = rank(x))
+```
+
+To replicate this in base R, you can use `ave()`:
+
+```{r}
+transform(gf, 
+  x_mean = ave(x, g, FUN = mean), 
+  x_rank = ave(x, g, FUN = rank)
+)
+```
+
+## `pull()`: Pull out a single variable
+
+`dplyr::pull()` extracts a variable either by name or position:
+
+```{r}
+mtcars %>% pull(1)
+mtcars %>% pull(cyl)
+```
+
+This equivalent to `[[` for positions and `$` for names:
+
+```{r}
+mtcars[[1]]
+mtcars$cyl
+```
+
+
+## `rename()`: Rename variables by name
+
+`dplyr::rename()` allows you to rename variables by name or position:
+
+```{r}
+iris %>% rename(sepal_length = Sepal.Length, sepal_width = 2)
+```
+
+Renaming variables by position is straight forward in base R:
+
+```{r}
+iris2 <- iris
+names(iris2)[2] <- "sepal_width"
+```
+
+Renaming variables by name requires a bit more work:
+
+```{r}
+names(iris2)[names(iris2) == "Sepal.Length"] <- "sepal_length"
+```
+
+Subsetting variables by position is straightforward in base R:
+
+```{r}
+iris[1:3] # single argument selects columns; never drops
+iris[1:3, , drop = FALSE]
+```
+
+You have two options to subset by name:
+
+```{r}
+iris[c("Species", "Sepal.Length")]
+subset(iris, select = c(Species, Sepal.Length))
+```
+
+Subsetting by function of name requires a bit of work with `grep()`:
+
+```{r}
+iris[grep("^Petal", names(iris))]
+```
+
+And you can use `Filter()` to subset by type:
+
+```{r}
+Filter(is.factor, iris)
+```
+
+## `summarise()`: Reduce multiple values down to a single value
+
+`dplyr::summarise()` computes one or more summaries for each group:
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(mean = mean(disp), n = n())
+```
+
+I think the closest base R equivalent uses `by()`. Unfortunately `by()` returns a list of data frames, but you can combine them back together again with `do.call()` and `rbind()`:
+
+```{r}
+mtcars_by <- by(mtcars, mtcars$cyl, function(df) {
+  with(df, data.frame(cyl = cyl[[1]], mean = mean(disp), n = nrow(df)))
+})
+do.call(rbind, mtcars_by)
+```
+
+`aggregate()` comes very close to providing an elegant answer:
+
+```{r}
+agg <- aggregate(disp ~ cyl, mtcars, function(x) c(mean = mean(x), n = length(x)))
+agg
+```
+
+But unfortunately while it looks like there are `disp.mean` and `disp.n` columns, it's actually a single matrix column:
+
+```{r}
+str(agg)
+```
+
+You can see a variety of other options at <https://gist.github.com/hadley/c430501804349d382ce90754936ab8ec>, many generated by the R community inspired by [a tweet](https://twitter.com/hadleywickham/status/1231252596712771585).
+
+## `slice()`: Choose rows by position
+
+`slice()` selects rows with their location:
+
+```{r}
+slice(mtcars, 25:n())
+```
+
+This is straightforward to replicate with `[`:
+
+```{r}
+mtcars[25:nrow(mtcars), , drop = FALSE]
+```
+
+# Two-table verbs
+
+When we want to merge two data frames, `x` and `y`), we have a variety of different ways to bring them together. Various base R `merge()` calls are replaced by a variety of dplyr `join()` functions.
+
+| dplyr                  | base                                    |
+|------------------------|-----------------------------------------|
+| `inner_join(df1, df2)` |`merge(df1, df2)`                        | 
+| `left_join(df1, df2) ` |`merge(df1, df2, all.x = TRUE)`          | 
+| `right_join(df1, df2)` |`merge(df1, df2, all.y = TRUE)`          | 
+| `full_join(df1, df2)`  |`merge(df1, df2, all = TRUE)`            | 
+| `semi_join(df1, df2)`  |`df1[df1xx, , drop = FALSE]`  | 
+| `anti_join(df1, df2)`  |`df1[!df1xx, , drop = FALSE]` | 
+
+For more information about two-table verbs, see `vignette("two-table")`.
+
+### Mutating joins
+
+dplyr's `inner_join()`, `left_join()`, `right_join()`, and `full_join()` add new columns from `y` to `x`, matching rows based on a set of "keys", and differ only in how missing matches are handled. They are equivalent to calls to `merge()` with various settings of the `all`, `all.x`, and `all.y` arguments. The main difference is the order of the rows:
+
+* dplyr preserves the order of the `x` data frame.
+* `merge()` sorts the key columns.
+
+### Filtering joins
+
+dplyr's `semi_join()` and `anti_join()` affect only the rows, not the columns:
+
+```{r}
+band_members %>% semi_join(band_instruments)
+band_members %>% anti_join(band_instruments)
+```
+
+They can be replicated in base R with `[` and `%in%`:
+
+```{r}
+band_members[band_members$name %in% band_instruments$name, , drop = FALSE]
+band_members[!band_members$name %in% band_instruments$name, , drop = FALSE]
+```
+
+Semi and anti joins with multiple key variables are considerably more challenging to implement.
