@@ -22,4 +22,55 @@
 
 
 
+Cutting speeds for various materials using a plain high speed steel cutter
 
+Material type	Meters per min (MPM)	Surface feet per min (SFM)
+Steel (tough)	18–50	60–100
+Mild Steel	3–38	10–125
+Mild Steel (with coolant)	6–7	20–25
+Cast Iron (medium)	1–2	6–8
+Alloy Steels (1320–9262)	3–20	12–65[5]
+Carbon Steels (C1008–C1095)	4–51	0–70[6]
+Free Cutting Steels (B1111–B1113 & C1108–C1213)	35–69	115–225[6]
+Stainless Steels (300 & 400 series)	23–40	30–75[7]
+Bronzes	24–45	10–80
+Leaded Steel (Leadloy 12L14)	91	30[8]
+Aluminium	122-305	400-1000[9]
+Brass	90–210	300–700[10]
+Machinable Wax	6	20
+Acetal Copolymer (Delrin)	11	35
+Polyethylene	12	40
+Acrylic (with coolant)	15	50
+Wood	183–305	600–1000
+
+
+
+Chip load
+
+Here are the suggested chip load ranges based on material and tool diameter. This chart should be used as a starting reference
+range only and are based on cutting depth being equal to cutting diameter of the tool.  For deeper cuts, it is necessary to 
+reduce the chipload as follows:  
+Cut depth 2x Tool Diameter reduce chipload by 20-25%
+Cut depth 3x Tool Diameter reduce chipload by 40-50%
+
+"Material","Tool Diameter","Min Chip Load","Max Chip Load"					
+"Hardwood","1/8",".003",".005"	
+"Hardwood","1/4",".009",".011"
+"Hardwood","3/8",".015",".018"
+"Hardwood","1/2 & up",".019",".021"
+"Softwood/Plywood"," 1/8",".004",".006"
+"Softwood/Plywood","1/4",".011",".013"
+"Softwood/Plywood","3/8",".017",".020"
+"Softwood/Plywood","1/2 & up",".021",".023"
+"MDF/Particle Board","1/8",".004",".007"	
+"MDF/Particle Board","1/4",".013",".016"	
+"MDF/Particle Board","3/8",".020",".023"	
+"MDF/Particle Board","1/2 & up",".025",".027"	
+"Soft Plastic","1/8",".003",".006"	
+"Soft Plastic","1/4",".007",".010"	
+"Soft Plastic","3/8",".010",".012"	
+"Soft Plastic","1/2 & up",".012",".016"	
+"Hard Plastic","1/8",".002",".004"
+"Hard Plastic","1/4",".006",".009"
+"Hard Plastic","3/8",".008",".010"
+"Hard Plastic","1/2 & up",".010",".012"
